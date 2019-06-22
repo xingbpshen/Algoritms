@@ -116,17 +116,39 @@ public class SortUtil<T> {
 
             while(h >= 1){
 
-                for(int i = 0;i<input.length;i+=h){
+//                for(int i = 0;i<input.length;i+=h){
+//
+//                    for(int j = i;j>0;j-=h){
+//
+//                        if(((Comparable)input[j]).compareTo(input[j-h])<0) {
+//
+//                            T temp = input[j];
+//
+//                            input[j] = input[j - h];
+//
+//                            input[j - h] = temp;
+//
+//                        }
+//
+//                    }
+//
+//                }
 
-                    for(int j = i;j>0;j-=h){
+                for(int repeat = 0; repeat < h;repeat++){
 
-                        if(((Comparable)input[j]).compareTo(input[j-h])<0) {
+                    for(int i = repeat;i < input.length;i += h){
 
-                            T temp = input[j];
+                        for(int j = i;j > repeat;j-=h){
 
-                            input[j] = input[j - h];
+                            if(((Comparable)input[j]).compareTo(input[j-h])<0) {
 
-                            input[j - h] = temp;
+                                T temp = input[j];
+
+                                input[j] = input[j - h];
+
+                                input[j - h] = temp;
+
+                            }
 
                         }
 
@@ -148,60 +170,174 @@ public class SortUtil<T> {
 
     }
 
+
+
     @SuppressWarnings("unchecked")
-    public void comb2AscArr21AscArr(T[] t1, T[] t2, T[] result) throws Exception{
+    public boolean checkAscOrdered(T[] input, int s, int e) throws Exception {
 
-        if(t1 instanceof Comparable[]&&t2 instanceof Comparable[]){
+        if(input instanceof Comparable[]) {
 
-            int i = 0;
+            if(s==e){
 
-            int j = 0;
+                return true;
 
-            int k = 0;
+            } else {
 
-            while((i!=t1.length)&&(j!=t2.length)){
+                for (int i = s + 1; i <= e; i++) {
 
-                if(((Comparable)t1[i]).compareTo(t2[j])<0){
+                    if (!(((Comparable) input[i - 1]).compareTo(input[i]) <= 0)) {
 
-                    result[k] = t1[i];
+                        return false;
 
-                    k++;
+                    }
+
+                }
+
+                return true;
+
+            }
+
+        } else {
+
+            throw new Exception("Fail to check due to incomparable array input.");
+
+        }
+
+    }
+
+    private Integer[] merge(Integer[] arr, int s, int m, int e){
+
+            Integer[] rs  = new Integer[m-s+1];
+
+            Integer[] re = new Integer[e-m];
+
+            int temp = s;
+
+            for(int i = 0; i < rs.length;i++){
+
+                rs[i] = arr[temp];
+
+                temp++;
+
+            }
+
+            for(int i = 0; i < re.length;i++){
+
+                re[i] = arr[temp];
+
+                temp++;
+
+            }
+
+            ArrCombHelper<Integer> helper = new ArrCombHelper<Integer>();
+
+            Integer[] aux = new Integer[rs.length+re.length];
+
+            try {
+
+                aux = helper.comb2AscArr21AscArr(rs, re, aux);
+
+            }catch(Exception e1){
+
+                e1.printStackTrace();
+
+        }
+
+            for(Integer n : aux){
+
+               arr[s] = n;
+
+               s++;
+
+            }
+
+            return arr;
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public Integer[] mergeSort(Integer[] input, int s, int e){
+
+            if(s!=e){
+
+                int mid = (e+s)/2;
+
+                mergeSort(input, s, mid);
+
+                mergeSort(input, mid+1, e);
+
+                merge(input, s, mid, e);
+
+                return input;
+
+            } else {
+
+                return input;
+
+            }
+
+    }
+
+    public Integer[] quickSort(Integer[] input, int lo, int hi){
+
+//        System.out.print(lo+" "+hi);
+//        System.out.println();
+//        System.out.println("CALLED");
+
+        if(lo == hi||lo>hi){
+
+            return input;
+
+        } else {
+
+            int i = lo;
+
+            int j = hi;
+
+            int k = lo;
+
+            while(i<=hi&&j>=lo&&i>=lo&&j<=hi) {
+
+                while (input[j] >= input[k]) {
+
+                    if(i==j) break;
+
+                    j--;
+
+                }
+
+                if(i==j) break;
+
+                if(input[j]<input[k]) {
+                    Integer temp = input[k];
+                    input[k] = input[j];
+                    input[j] = temp;
+                    k = j;
+                }
+
+                while(input[i]<=input[k]){
+
+                    if(i==j) break;
 
                     i++;
 
-                } else if(((Comparable)t1[i]).compareTo(t2[j])>=0){
+                }
 
-                    result[k] = t2[j];
+                if(i==j) break;
 
-                    k++;
-
-                    j++;
-
+                if(input[i]>input[k]) {
+                    Integer temp = input[k];
+                    input[k] = input[i];
+                    input[i] = temp;
+                    k = i;
                 }
 
             }
 
-            if(i == t1.length){
+            quickSort(input, lo, i-1);
+            quickSort(input, i+1, hi);
 
-                for(;j<t2.length;j++,k++){
-
-                    result[k] = t2[j];
-
-                }
-
-            } else if(j == t2.length){
-
-                for(;i<t1.length;i++,k++){
-
-                    result[k] = t1[i];
-
-                }
-
-            }
-
-        }else{
-
-            throw new Exception("Fail to sort due to incomparable array input.");
+            return input;
 
         }
 
