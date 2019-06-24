@@ -1,6 +1,6 @@
 import org.junit.Assert;
 import org.junit.Test;
-import sorting.ArrCombHelper;
+import Helper.ArrCombHelper;
 import sorting.SortUtil;
 
 public class SortTest {
@@ -91,9 +91,7 @@ public class SortTest {
         try {
             Assert.assertEquals(ans, mySort.mergeSort(arr,0,arr.length-1));
         } catch (Exception e){
-
             e.printStackTrace();
-
         }
 
     }
@@ -106,9 +104,20 @@ public class SortTest {
         try {
             Assert.assertEquals(ans, mySort.quickSort(arr,0,arr.length-1));
         } catch (Exception e){
-
             e.printStackTrace();
+        }
 
+    }
+
+    @Test
+    public void binaryHeapSortTest(){
+
+        SortUtil<Integer> mySort = new SortUtil<Integer>();
+
+        try{
+            Assert.assertEquals(ans, mySort.binaryHeapSort(this.arr));
+        } catch (Exception e){
+            e.printStackTrace();
         }
 
     }

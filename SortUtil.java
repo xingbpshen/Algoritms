@@ -1,5 +1,9 @@
 package sorting;
 
+
+import DataStructure.BinaryHeap;
+import Helper.ArrCombHelper;
+
 public class SortUtil<T> {
 
     @SuppressWarnings("unchecked")
@@ -173,7 +177,7 @@ public class SortUtil<T> {
 
 
     @SuppressWarnings("unchecked")
-    public boolean checkAscOrdered(T[] input, int s, int e) throws Exception {
+    private boolean checkAscOrdered(T[] input, int s, int e) throws Exception {
 
         if(input instanceof Comparable[]) {
 
@@ -340,6 +344,16 @@ public class SortUtil<T> {
             return input;
 
         }
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public T[] binaryHeapSort(T[] input){
+
+        BinaryHeap myHeap = new BinaryHeap(input);
+        T[] result = (T[]) new Comparable[input.length];
+        for(int i = input.length-1;i>=0;i--) result[i] = (T)myHeap.delMax();
+        return result;
 
     }
 
